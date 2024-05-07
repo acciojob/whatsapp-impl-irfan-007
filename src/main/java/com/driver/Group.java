@@ -1,3 +1,4 @@
+
 package com.driver;
 
 public class Group {
@@ -28,3 +29,4 @@ public class Group {
         this.numberOfParticipants = numberOfParticipants;
     }
 }
+

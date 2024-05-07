@@ -1,4 +1,10 @@
+
 package com.driver;
+
+import java.util.*;
+
+import org.springframework.stereotype.Repository;
+
 
 import java.util.*;
 
@@ -41,6 +47,9 @@ public class WhatsappRepository {
         // If there are only 2 users, the group is a personal chat and the group name should be kept as the name of the second user(other than admin)
         // If there are 2+ users, the name of group should be "Group #count". For example, the name of first group would be "Group 1", second would be "Group 2" and so on.
         // Note that a personal chat is not considered a group and the count is not updated for personal chats.
+        if(users.size()<2)
+            return null;
+
         for(User u:users){
             try {
                 createUser(u.getName(),u.getMobile());
@@ -48,8 +57,7 @@ public class WhatsappRepository {
                 throw new RuntimeException(e);
             }
         }
-        if(users.size()<2)
-            return null;
+
         if(users.size()>2){
             customGroupCount++;
             Group g=new Group("Group"+customGroupCount,users.size());
@@ -76,7 +84,7 @@ public class WhatsappRepository {
             throw new Exception("Group does not exist");
         int flag=0;
         for(User user:groupUserMap.get(group)){
-            if(user.equals(sender))
+            if(user.getMobile().equals(sender.getMobile()))
                 flag=1;
         }
         if(flag==0)
@@ -95,11 +103,11 @@ public class WhatsappRepository {
         //Throw "User is not a participant" if the user is not a part of the group
         if(!adminMap.containsKey(group))
             throw new Exception("Group does not exist");
-        if(!adminMap.get(group).equals(approver))
+        if(!adminMap.get(group).getMobile().equals(approver.getMobile()))
             throw new Exception("Approver does not have rights");
         int flag=0;
         for(User u:groupUserMap.get(group)){
-            if(u.equals(user))
+            if(u.getMobile().equals(user.getMobile()))
                 flag=1;
         }
         if(flag==0)
@@ -117,10 +125,10 @@ public class WhatsappRepository {
         if(!userMap.containsKey(user.getMobile()))
             throw new Exception("User not found");
         for(List<User> userList:groupUserMap.values()){
-            if(userList.get(0).equals(user))
+            if(userList.get(0).getMobile().equals(user.getMobile()))
                 throw new Exception("Cannot remove admin");
             for(User u:userList){
-                if(u.equals(user)){ // removable user exist
+                if(u.getMobile().equals(user.getMobile())){ // removable user exist
                     userMap.remove(user);
                     userList.remove(user);
                     int ct=userList.size();
@@ -143,3 +151,4 @@ public class WhatsappRepository {
         return "";
     }
 }
+

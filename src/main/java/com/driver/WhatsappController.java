@@ -1,3 +1,4 @@
+
 package com.driver;
 
 import java.util.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("whatsapp")
@@ -61,7 +63,7 @@ public class WhatsappController {
         return whatsappService.sendMessage(message, sender, group);
     }
     @PutMapping("/change-admin")
-    public String changeAdmin(@RequestBody User approver,@RequestBody User user,@RequestBody Group group) throws Exception{
+    public String changeAdmin(@RequestBody User approver,User user,Group group) throws Exception{
         //Throw "Group does not exist" if the mentioned group does not exist
         //Throw "Approver does not have rights" if the approver is not the current admin of the group
         //Throw "User is not a participant" if the user is not a part of the group
@@ -91,3 +93,4 @@ public class WhatsappController {
         return whatsappService.findMessage(start, end, K);
     }
 }
+
